@@ -20,100 +20,161 @@ namespace MvcAssignment1.Migrations
             //  This method will be called after migrating to the latest version.
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
-            var roleManager =
-                new RoleManager<IdentityRole>(
-                    new RoleStore<IdentityRole>(context));
-            var userManager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(context));
-            if (!context.Roles.Any(p => p.Name == "Users"))
+            var userManager =
+            new UserManager<ApplicationUser>(
+                    new UserStore<ApplicationUser>(context));
+
+            ApplicationUser johnDoe;
+            ApplicationUser janeDoe;
+            Course softwareDeveloperCourse;
+            Course cyberDefenseCourse;
+            Course nsDiplomaCourse;
+            Details courseOne;
+            Details courseTwo;
+            Details courseThree;
+            if (!context.Users.Any(p => p.UserName ==
+            "johndoe@test.com"))
             {
-                roleManager.Create(new IdentityRole { Name = "Users" });
+                johnDoe = new ApplicationUser();
+                johnDoe.FirstName = "John";
+                johnDoe.LastName = "Doe";
+                johnDoe.Email = "johndoe@test.com";
+                johnDoe.UserName = "johndoe@test.com";
+
+                userManager.Create(johnDoe, "Password-1");
             }
-            if (!context.Roles.Any(p => p.Name == "Courses"))
+            else
             {
-                roleManager.Create(new IdentityRole { Name = "Courses" });
+                johnDoe = context.Users.First(p =>
+                p.UserName == "johndoe@test.com");
             }
 
-            ApplicationUser user1;
-            if (!context.Users.Any(
-                p => p.UserName == "johndoe@test.com"))
+            if (!context.Users.Any(p => p.UserName ==
+            "janedoe@test.com"))
             {
-                user1 = new ApplicationUser();
-                user1.FirstName = "John";
-                user1.LastName = "Doe";
-                user1.UserName = "johndoe@test.com";
-                user1.Email = "johndoe@test.com";
-                userManager.Create(user1, "Password-1");
+                janeDoe = new ApplicationUser();
+                janeDoe.FirstName = "Jane";
+                janeDoe.LastName = "Doe";
+                janeDoe.Email = "janedoe@test.com";
+                janeDoe.UserName = "janedoe@test.com";
+
+                userManager.Create(janeDoe, "Password-1");
             }
             else
             {
-                user1 = context
-                    .Users
-                    .First(p => p.UserName == "johndoe@test.com");
+                janeDoe = context.Users.First(p =>
+                p.UserName == "janedoe@test.com");
             }
-            if (!userManager.IsInRole(user1.Id, "Users"))
+
+            if (!context.Courses.Any(p =>
+                p.Name == "Software Developer"))
             {
-                userManager.AddToRole(user1.Id, "Users");
-            }
-            ApplicationUser user2;
-            if (!context.Users.Any(
-                p => p.UserName == "johndoe@test.com"))
-            {
-                user2 = new ApplicationUser();
-                user2.FirstName = "Jane";
-                user2.LastName = "Doe";
-                user2.UserName = "janedoe@test.com";
-                user2.Email = "janedoe@test.com";
-                userManager.Create(user2, "Password-1");
+                softwareDeveloperCourse = new Course();
+                courseOne = new Details();
+                softwareDeveloperCourse.Name = "Software Developer";
+                softwareDeveloperCourse.NumberOfHours = 330;
+                softwareDeveloperCourse.NumberOfEnrollments = 2;
+                softwareDeveloperCourse.DetailId = courseOne.CoursesId;
+                context.Courses.Add(softwareDeveloperCourse);
             }
             else
             {
-                user2 = context
-                    .Users
-                    .First(p => p.UserName == "janedoe@test.com");
+                softwareDeveloperCourse = context.Courses.First(p =>
+                p.Name == "Software Developer");
             }
-            if (!userManager.IsInRole(user2.Id, "Users"))
+
+            if (!context.Courses.Any(p =>
+                p.Name == "Cyber Defense"))
             {
-                userManager.AddToRole(user2.Id, "Users");
-            }
-            Course name1;
-            if (!context.Courses.Any(
-               p => p.Name == "John"))
-            {
-                name1 = new Course();
-                name1.Name = "softwaredeveloper,cyberdefense";
-                name1.NumberOfHours = 670;
-                userManager.Create(user1, "Password-1");
+                cyberDefenseCourse = new Course();
+                courseTwo = new Details();
+                cyberDefenseCourse.Name = "Cyber Defense";
+                cyberDefenseCourse.NumberOfHours = 340;
+                cyberDefenseCourse.NumberOfEnrollments = 1;
+                cyberDefenseCourse.DetailId = courseTwo.CoursesId;
+                context.Courses.Add(cyberDefenseCourse);
             }
             else
             {
-                name1 = context
-                    .Courses
-                    .First(p => p.Name == "John");
+                cyberDefenseCourse = context.Courses
+                    .First(p => p.Name == "Cyber Defense");
             }
-            if (!userManager.IsInRole(name1.Name, "Courses"))
+            if (!context.Courses.Any(p =>
+                p.Name == "Network Security Diploma"))
             {
-                userManager.AddToRole(name1.Name, "Courses");
-            }
-            Course name2;
-            if (!context.Courses.Any(
-               p => p.Name == "Jane"))
-            {
-                name2 = new Course();
-                name2.Name = "softwaredeveloper";
-                name2.NumberOfHours = 330;
-                userManager.Create(user2, "Password-1");
+                nsDiplomaCourse = new Course();
+                courseThree = new Details();
+                nsDiplomaCourse.Name = "Network Security Diploma";
+                nsDiplomaCourse.NumberOfHours = 400;
+                nsDiplomaCourse.NumberOfEnrollments = 0;
+                nsDiplomaCourse.DetailId = courseThree.CoursesId;
+                context.Courses.Add(nsDiplomaCourse);
             }
             else
             {
-                name2 = context
-                    .Courses
-                    .First(p => p.Name == "Jane");
+                nsDiplomaCourse = context.Courses
+                    .First(p => p.Name == "Network Security Diploma");
             }
-            if (!userManager.IsInRole(name2.Name, "Courses"))
+            if (!context.Detail.Any(p =>
+            p.CourseName == "Software Developer"))
             {
-                userManager.AddToRole(name2.Name, "Courses");
+                courseOne = new Details();
+                courseOne.CourseName = "Software Developer";
+                courseOne.NumberOfHours = 330;
+                courseOne.NumberOfEnrollments = 2;
+                courseOne.PersonName = "JohnDoe";
+                context.Detail.Add(courseOne);
             }
+            else
+            {
+                courseOne = context.Detail
+                    .First(p => p.CourseName == "Software Developer");
+            }
+            if (!context.Detail.Any(p =>
+           p.CourseName == "Cyber Defense"))
+            {
+                courseTwo = new Details();
+                courseTwo.CourseName = "Cyber Defense";
+                courseTwo.NumberOfHours = 340;
+                courseTwo.NumberOfEnrollments = 1;
+                courseTwo.PersonName = "JaneDoe";
+                context.Detail.Add(courseTwo);
+            }
+            else
+            {
+                courseTwo = context.Detail
+                    .First(p => p.CourseName == "Cyber Defense");
+            }
+            if (!context.Detail.Any(p =>
+           p.CourseName == "Network Security Diploma"))
+            {
+                courseThree = new Details();
+                courseThree.CourseName = "Network Security Diploma";
+                courseThree.NumberOfHours = 400;
+                courseThree.NumberOfEnrollments = 0;
+                courseThree.PersonName = "";
+                context.Detail.Add(courseThree);
+            }
+            else
+            {
+                courseThree = context.Detail
+                    .First(p => p.CourseName == "Network Security Diploma");
+            }
+
+            context.SaveChanges();
+
+            if (!johnDoe.Courses.Any())
+            {
+                johnDoe.Courses.Add(cyberDefenseCourse);
+            }
+
+            if (!janeDoe.Courses.Any())
+            {
+                janeDoe.Courses.Add(softwareDeveloperCourse);
+                janeDoe.Courses.Add(cyberDefenseCourse);
+            }
+
+            context.SaveChanges();
 
         }
     }
